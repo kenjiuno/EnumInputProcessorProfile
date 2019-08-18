@@ -14,7 +14,7 @@ CString GuidToStr(const GUID& id) {
 	return wc;
 }
 
-CString ClsidToName(const CLSID& id) {
+CString ClsidToName(const CLSID & id) {
 	CRegKey key;
 	auto errorCode = key.Open(HKEY_CLASSES_ROOT, CString(L"CLSID\\") + GuidToStr(id), KEY_READ);
 	if (NO_ERROR == errorCode) {
@@ -97,11 +97,17 @@ bool EnumIt() {
 	return true;
 }
 
-int wmain()
+int wmain(int argc, wchar_t** argv)
 {
 	auto hr = CoInitialize(NULL);
 	if (hr != S_OK) {
 		return 1;
+	}
+	for (auto x = 1; x < argc; x++) {
+		if (_wcsicmp(argv[x], L"/d") == 0) {
+			ImmDisableLegacyIME();
+			fwprintf(stderr, L"Using ImmDisableLegacyIME\n");
+		}
 	}
 	auto success = EnumIt();
 	CoUninitialize();
