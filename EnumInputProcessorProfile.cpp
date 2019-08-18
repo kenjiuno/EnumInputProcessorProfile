@@ -58,6 +58,7 @@ bool EnumIt() {
 	lines.Append(L"          |||||||            |+-- E: TF_IPP_FLAG_ENABLED\r\n");
 	lines.Append(L"          |||||||            ||+- S: TF_IPP_FLAG_SUBSTITUTEDBYINPUTPROCESSOR\r\n");
 	lines.Append(L"          |||||||            |||\r\n");
+	lines.Append(L"          |||||||            |||      KbdLayout CLSID\r\n");
 	while (true) {
 		TF_INPUTPROCESSORPROFILE profile;
 		{
@@ -67,7 +68,7 @@ bool EnumIt() {
 			}
 		}
 
-		lines.AppendFormat(L"%08lX <%C%C%C%C%C%C%C> %08lX <%C%C%C> %s CLSID %s \"%s\"\n"
+		lines.AppendFormat(L"%08lX <%C%C%C%C%C%C%C> %08lX <%C%C%C> %s %08X %s \"%s\"\n"
 			, (profile.dwCaps)
 			, (profile.dwCaps & TF_IPP_CAPS_DISABLEONTRANSITORY) ? 'D' : '.'
 			, (profile.dwCaps & TF_IPP_CAPS_SECUREMODESUPPORT) ? 'S' : '.'
@@ -83,6 +84,8 @@ bool EnumIt() {
 			, (profile.dwFlags & TF_IPP_FLAG_SUBSTITUTEDBYINPUTPROCESSOR) ? 'S' : '.'
 
 			, (profile.dwProfileType == TF_PROFILETYPE_INPUTPROCESSOR) ? L"TIP" : L"KBD"
+
+			, profile.hkl
 
 			, static_cast<LPCWSTR>(GuidToStr(profile.clsid))
 			, static_cast<LPCWSTR>(ClsidToName(profile.clsid))
